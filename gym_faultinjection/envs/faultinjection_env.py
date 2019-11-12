@@ -24,7 +24,7 @@ class FIEnv(gym.Env):
 
     self.viewer = None
 
-    self.action_space = spaces.Discrete(3)
+    self.action_space = spaces.Discrete(5)
     self.observation_space = spaces.Box(self.low, self.high, dtype=np.float32)
 
     self.seed()
@@ -49,8 +49,8 @@ class FIEnv(gym.Env):
 
     assert len(lineseg)>= 3
     done = int(lineseg[0])  #0: None 1; hazard happens
-    position = float(lineseg[1])
-    velocity = float(lineseg[2])
+    position = np.clip(float(lineseg[1]),self.min_position,104)
+    velocity = np.clip(float(lineseg[2]),self.min_speed,self.max_speed)
 
     self.state = (position, velocity)
     reward = 2*velocity - position
